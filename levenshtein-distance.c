@@ -1,11 +1,15 @@
-/* This sequential C program implements the Levenshtein distance which is a string metric for measuring the difference between two sequences. Informally, the Levenshtein distance between two words is the minimum number of single-character edits (i.e. insertions, deletions or substitutions) required to change one word into the other.
+/* This sequential C program implements the Levenshtein distance which is 
+a string metric for measuring the difference between two sequences. Informally,
+ the Levenshtein distance between two words is the minimum number 
+of single-character edits (i.e. insertions, deletions or substitutions) 
+required to change one word into the other.
 */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int LevenshteinDistance(char *s, char *t);
+int LevenshteinDistance(char *restrict s, char *restrict t);
 
 #define min(a,b) (((a)<(b))?(a):(b))
 #define minimum(a,b,c) ((min(a,b)<(min(a,c)))? \
@@ -21,19 +25,22 @@ int main()
     printf("The minimum number of operations required to change %s into %s is %d \n", s, t, cost);
 
     cost = LevenshteinDistance(t,s);
-    printf("The minimum number of operations required to change %s into %s is %d \n", s, t, cost);
+    printf("The minimum number of operations required to change %s into %s is %d \n", t, s, cost);
 
     cost = LevenshteinDistance("Sunday", "");
-    printf("The minimum number of operations required to change %s into %s is %d \n", s, t, cost);
+    printf("The minimum number of operations required to change %s into %s is %d \n", t, "", cost);
+
+    cost = LevenshteinDistance(s, s);
+    printf("The minimum number of operations required to change %s into %s is %d (should be zero) \n", s, s, cost);
 
     return 1;
 }
 
 
-int LevenshteinDistance(char *s, char *t)
+int LevenshteinDistance(char *restrict s, char *restrict t)
 {
     // degenerate cases
-    if (s == t) return 0;
+    if (strcmp(s, t) == 0) return 0;
     if (strlen(s) == 0) return strlen(t);
     if (strlen(t) == 0) return strlen(s);
     
