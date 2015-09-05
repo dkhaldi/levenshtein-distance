@@ -11,10 +11,17 @@ required to change one word into the other.
 
 int LevenshteinDistance(char *restrict s, char *restrict t);
 
-#define min(a,b) (((a)<(b))?(a):(b))
-#define minimum(a,b,c) ((min(a,b)<(min(a,c)))? \
-			min(a,b)<min(b,c)?min(a,b):min(b,c):\
-			(min(a,c))<min(b,c)?min(a,c):min(b,c))
+static inline int
+min2 (const int a, const int b)
+{
+    return a < b ? a : b;
+}
+
+static inline int
+min3 (const int a, const int b, const int c)
+{
+    return min2 (a, min2 (b, c));
+}
 
 int main()
 {
@@ -33,7 +40,7 @@ int main()
     cost = LevenshteinDistance(s, s);
     printf("The minimum number of operations required to change %s into %s is %d (should be zero) \n", s, s, cost);
 
-    return 1;
+    return 0;
 }
 
 
@@ -63,7 +70,7 @@ int LevenshteinDistance(char *restrict s, char *restrict t)
         for (int j = 0; j <  strlen(t); j++)
         {
             int cost = (s[i] == t[j]) ? 0 : 1;
-            v1[j + 1] = minimum(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);
+            v1[j + 1] = min3(v1[j] + 1, v0[j + 1] + 1, v0[j] + cost);
         }
 
         // copy v1 (current row) to v0 (previous row) for next iteration
